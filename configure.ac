@@ -337,9 +337,13 @@ fi
 dnl
 dnl Check for ICU
 dnl
-ICU_MODULE_CFLAGS="`icu-config --cppflags 2> /dev/null`";
-ICU_MODULE_LIBS="`icu-config --ldflags 2> /dev/null`";
-if test -z "$ICU_MODULE_LIBS"
+AC_MSG_CHECKING(ICU version)
+ICU_MODULE_VERSION="`pkg-config --modversion icu-i18n 2> /dev/null`";
+ICU_MODULE_CFLAGS="`pkg-config --cflags icu-i18n 2> /dev/null`";
+ICU_MODULE_LIBS="`pkg-config --libs icu-i18n 2> /dev/null`";
+AC_MSG_RESULT([$ICU_MODULE_VERSION])
+
+if test -z "$ICU_MODULE_VERSION"
 then
     PKG_CHECK_MODULES([ICU_MODULE], [icu >= 0.21])
 fi
