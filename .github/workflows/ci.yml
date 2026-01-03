@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential devscripts automake autoconf \
+            debhelper libtool pkg-config libicu74 icu-devtools libicu-dev \
+            libxml2-dev uuid-dev fuse libfuse-dev libsnmp-dev quilt
+
+      - name: Apply Debian patches
+        run: |
+          export QUILT_PATCHES=debian/patches
+          export QUILT_SERIES=series
+          quilt push -a
+
+      - name: Configure
+        run: |
+          ./autogen.sh
+          ./configure
+
+      - name: Build
+        run: make
+
+
+  build-deb:
+      runs-on: ubuntu-latest
+      needs: build
+      if: startsWith(github.ref, 'refs/tags/')
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Install debian packaging tools
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y build-essential devscripts automake autoconf \
+              debhelper libtool pkg-config libicu74 icu-devtools libicu-dev \
+              libxml2-dev uuid-dev fuse libfuse-dev libsnmp-dev quilt
+
+        - name: Apply Debian patches
+          run: |
+            export QUILT_PATCHES=debian/patches
+            export QUILT_SERIES=series
+            quilt push -a
+
+        - name: Build .deb package
+          run: |
+            dpkg-buildpackage -us -uc
+
+        - name: Move .deb into workspace
+          run: mv ../*.deb .
+
+        - name: Upload .deb to GitHub Release
+          uses: softprops/action-gh-release@v2
+          with:
+            files: ltfs_*.deb
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
