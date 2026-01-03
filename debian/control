@@ -1,0 +1,34 @@
+Source: ltfs
+Section: unknown
+Priority: optional
+Maintainer: Manuel Virgilio <real_virgil@yahoo.it>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+ build-essential,
+ automake,
+ autoconf,
+ libtool,
+ pkg-config,
+ libicu74,
+ icu-devtools,
+ libicu-dev,
+ libxml2-dev,
+ uuid-dev,
+ fuse,
+ libfuse-dev,
+ libsnmp-dev
+Standards-Version: 4.7.2
+Homepage: https://github.com/manuvi/ltfs
+
+
+Package: ltfs
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Linear Tape File System userspace utilities
+ LTFS provides userland tools to mount and manage Linear Tape File
+ System formatted LTO tapes as a standard filesystem. It implements
+ the SNIA LTFS specifications so tape volumes appear as directories
+ with normal file access semantics.

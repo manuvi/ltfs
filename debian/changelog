@@ -1,0 +1,5 @@
+ltfs (2.4.8.2) unstable; urgency=medium
+
+  * First Debian packaging of ltfs (initial debianization).
+
+ -- Manuel Virgilio <real_virgil@yahoo.it>  Sat, 03 Jan 2026 18:46:25 +0100
