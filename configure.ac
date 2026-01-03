@@ -46,10 +46,9 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 AC_PROG_CC
 AC_USE_SYSTEM_EXTENSIONS
-AC_PROG_CC_C99
 AM_PROG_CC_C_O
 AM_PROG_AR
-AC_PROG_LIBTOOL
+LT_INIT
 
 dnl
 dnl Detecting OS
@@ -462,7 +461,7 @@ dnl Update flags
 dnl Sets CFLAGS to force optimization and debugging options, which isn't quite kosher
 dnl
 AM_CPPFLAGS="-D_GNU_SOURCE -I\$(top_srcdir)/src -DLTFS_CONFIG_FILE='\"${sysconfdir}/ltfs.conf\"' -DLTFS_BASE_DIR='\"${prefix}\"'"
-AM_CFLAGS="-Wall -Wsign-compare -fsigned-char ${FUSE_MODULE_CFLAGS} ${UUID_MODULE_CFLAGS} ${LIBXML2_MODULE_CFLAGS} ${ICU_MODULE_CFLAGS} ${SNMP_ENABLE} ${SNMP_MODULE_CFLAGS}"
+AM_CFLAGS="-std=gnu99 -Wall -Wsign-compare -fsigned-char ${FUSE_MODULE_CFLAGS} ${UUID_MODULE_CFLAGS} ${LIBXML2_MODULE_CFLAGS} ${ICU_MODULE_CFLAGS} ${SNMP_ENABLE} ${SNMP_MODULE_CFLAGS} -Wno-declaration-after-statement"
 
 if test "x$use_fast" = "xyes"
 then
